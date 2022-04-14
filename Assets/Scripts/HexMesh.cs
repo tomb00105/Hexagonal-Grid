@@ -23,53 +23,43 @@ public class HexMesh : MonoBehaviour {
 		hexMesh.name = "Hex Mesh";
 	}
 
-	public void Clear()
-	{
+	public void Clear () {
 		hexMesh.Clear();
 		vertices = ListPool<Vector3>.Get();
-		if (useCellData)
-		{
+		if (useCellData) {
 			cellWeights = ListPool<Color>.Get();
 			cellIndices = ListPool<Vector3>.Get();
 		}
-		if (useUVCoordinates)
-		{
+		if (useUVCoordinates) {
 			uvs = ListPool<Vector2>.Get();
 		}
-		if (useUV2Coordinates)
-		{
+		if (useUV2Coordinates) {
 			uv2s = ListPool<Vector2>.Get();
 		}
 		triangles = ListPool<int>.Get();
 	}
 
-
-	public void Apply()
-	{
+	public void Apply () {
 		hexMesh.SetVertices(vertices);
 		ListPool<Vector3>.Add(vertices);
-		if (useCellData)
-		{
+		if (useCellData) {
 			hexMesh.SetColors(cellWeights);
 			ListPool<Color>.Add(cellWeights);
 			hexMesh.SetUVs(2, cellIndices);
 			ListPool<Vector3>.Add(cellIndices);
 		}
-		if (useUVCoordinates)
-		{
+		if (useUVCoordinates) {
 			hexMesh.SetUVs(0, uvs);
 			ListPool<Vector2>.Add(uvs);
 		}
-		if (useUV2Coordinates)
-		{
+		if (useUV2Coordinates) {
 			hexMesh.SetUVs(1, uv2s);
 			ListPool<Vector2>.Add(uv2s);
 		}
 		hexMesh.SetTriangles(triangles, 0);
 		ListPool<int>.Add(triangles);
 		hexMesh.RecalculateNormals();
-		if (useCollider)
-		{
+		if (useCollider) {
 			meshCollider.sharedMesh = hexMesh;
 		}
 	}
@@ -94,23 +84,6 @@ public class HexMesh : MonoBehaviour {
 		triangles.Add(vertexIndex + 2);
 	}
 
-	public void AddTriangleCellData(
-		Vector3 indices, Color weights1, Color weights2, Color weights3
-	)
-	{
-		cellIndices.Add(indices);
-		cellIndices.Add(indices);
-		cellIndices.Add(indices);
-		cellWeights.Add(weights1);
-		cellWeights.Add(weights2);
-		cellWeights.Add(weights3);
-	}
-
-	public void AddTriangleCellData(Vector3 indices, Color weights)
-	{
-		AddTriangleCellData(indices, weights, weights, weights);
-	}
-
 	public void AddTriangleUV (Vector2 uv1, Vector2 uv2, Vector3 uv3) {
 		uvs.Add(uv1);
 		uvs.Add(uv2);
@@ -121,6 +94,21 @@ public class HexMesh : MonoBehaviour {
 		uv2s.Add(uv1);
 		uv2s.Add(uv2);
 		uv2s.Add(uv3);
+	}
+
+	public void AddTriangleCellData (
+		Vector3 indices, Color weights1, Color weights2, Color weights3
+	) {
+		cellIndices.Add(indices);
+		cellIndices.Add(indices);
+		cellIndices.Add(indices);
+		cellWeights.Add(weights1);
+		cellWeights.Add(weights2);
+		cellWeights.Add(weights3);
+	}
+
+	public void AddTriangleCellData (Vector3 indices, Color weights) {
+		AddTriangleCellData(indices, weights, weights, weights);
 	}
 
 	public void AddQuad (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4) {
@@ -153,33 +141,6 @@ public class HexMesh : MonoBehaviour {
 		triangles.Add(vertexIndex + 3);
 	}
 
-	public void AddQuadCellData(
-		Vector3 indices,
-		Color weights1, Color weights2, Color weights3, Color weights4
-	)
-	{
-		cellIndices.Add(indices);
-		cellIndices.Add(indices);
-		cellIndices.Add(indices);
-		cellIndices.Add(indices);
-		cellWeights.Add(weights1);
-		cellWeights.Add(weights2);
-		cellWeights.Add(weights3);
-		cellWeights.Add(weights4);
-	}
-
-	public void AddQuadCellData(
-		Vector3 indices, Color weights1, Color weights2
-	)
-	{
-		AddQuadCellData(indices, weights1, weights1, weights2, weights2);
-	}
-
-	public void AddQuadCellData(Vector3 indices, Color weights)
-	{
-		AddQuadCellData(indices, weights, weights, weights, weights);
-	}
-
 	public void AddQuadUV (Vector2 uv1, Vector2 uv2, Vector3 uv3, Vector3 uv4) {
 		uvs.Add(uv1);
 		uvs.Add(uv2);
@@ -206,5 +167,29 @@ public class HexMesh : MonoBehaviour {
 		uv2s.Add(new Vector2(uMax, vMin));
 		uv2s.Add(new Vector2(uMin, vMax));
 		uv2s.Add(new Vector2(uMax, vMax));
+	}
+
+	public void AddQuadCellData (
+		Vector3 indices,
+		Color weights1, Color weights2, Color weights3, Color weights4
+	) {
+		cellIndices.Add(indices);
+		cellIndices.Add(indices);
+		cellIndices.Add(indices);
+		cellIndices.Add(indices);
+		cellWeights.Add(weights1);
+		cellWeights.Add(weights2);
+		cellWeights.Add(weights3);
+		cellWeights.Add(weights4);
+	}
+
+	public void AddQuadCellData (
+		Vector3 indices, Color weights1, Color weights2
+	) {
+		AddQuadCellData(indices, weights1, weights1, weights2, weights2);
+	}
+
+	public void AddQuadCellData (Vector3 indices, Color weights) {
+		AddQuadCellData(indices, weights, weights, weights, weights);
 	}
 }
