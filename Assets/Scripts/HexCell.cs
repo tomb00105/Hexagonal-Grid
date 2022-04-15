@@ -12,6 +12,8 @@ public class HexCell : MonoBehaviour {
 
 	public int Index { get; set; }
 
+	public int ColumnIndex { get; set; }
+
 	public int Elevation {
 		get {
 			return elevation;
@@ -596,4 +598,9 @@ public class HexCell : MonoBehaviour {
 			ShaderData.RefreshVisibility(this);
         }
     }
+
+	public void SetMapData(float data)
+	{
+		ShaderData.SetMapData(this, data);
+	}
 }

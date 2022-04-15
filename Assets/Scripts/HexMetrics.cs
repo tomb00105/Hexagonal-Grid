@@ -9,6 +9,8 @@ public static class HexMetrics {
 
 	public const float innerRadius = outerRadius * outerToInner;
 
+	public const float innerDiameter = innerRadius * 2f;
+
 	public const float solidFactor = 0.8f;
 
 	public const float blendFactor = 1f - solidFactor;
@@ -73,13 +75,36 @@ public static class HexMetrics {
 		new float[] {0.4f, 0.6f, 0.8f}
 	};
 
+	public static int wrapSize;
+
+	public static bool Wrapping
+	{
+		get
+		{
+			return wrapSize > 0;
+		}
+	}
+
 	public static Texture2D noiseSource;
 
-	public static Vector4 SampleNoise (Vector3 position) {
-		return noiseSource.GetPixelBilinear(
+	public static Vector4 SampleNoise(Vector3 position)
+	{
+		Vector4 sample = noiseSource.GetPixelBilinear(
 			position.x * noiseScale,
 			position.z * noiseScale
 		);
+
+		if (Wrapping && position.x < innerDiameter * 1.5f)
+		{
+			Vector4 sample2 = noiseSource.GetPixelBilinear(
+				(position.x + wrapSize * innerDiameter) * noiseScale,
+				position.z * noiseScale
+			);
+			sample = Vector4.Lerp(
+				sample2, sample, position.x * (1f / innerDiameter) - 0.5f
+			);
+		}
+		return sample;
 	}
 
 	public static void InitializeHashGrid (int seed) {
